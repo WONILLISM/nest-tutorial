@@ -8,34 +8,46 @@ import {
   Body,
   Query,
 } from '@nestjs/common';
+import { Movie } from './entities/movie.entity';
+import { MoviesService } from './movies.service';
 
 @Controller('movies')
 export class MoviesController {
-  @Get()
-  getAll() {
-    return 'This will return all movies';
-  }
-  /** query 요청
-   * nestjs는 get:id보다 밑에 있으면 nestjs는 search를 id로 판단한다.
+  /**
+   * moviesService class를 가져옴
+   * @param moviesService
    */
-  @Get('search')
-  search(@Query('year') seachingYear: string) {
-    return `We are searching for a movie made after: ${seachingYear}`;
+  constructor(private readonly moviesService: MoviesService) {}
+
+  /**
+   * @returns Movie 목록
+   */
+  @Get()
+  getAll(): Movie[] {
+    return this.moviesService.getMovies();
   }
 
+  /**
+   * @param movieId
+   * @returns Movie 상세 정보
+   */
   @Get(':id')
   getOne(@Param('id') movieId: string) {
-    return `This will return one movie with the id: ${movieId}`;
+    return this.moviesService.getMovie(movieId);
   }
 
+  /**
+   * @param movieData
+   * @returns
+   */
   @Post()
   create(@Body() movieData) {
-    return movieData;
+    return this.moviesService.create(movieData);
   }
 
   @Delete(':id')
   remove(@Param('id') movieId: string) {
-    return `This will delete a movie with the id: ${movieId}`;
+    return this.moviesService.removeMovie(movieId);
   }
 
   @Patch(':id')
