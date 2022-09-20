@@ -23,7 +23,7 @@ export class MoviesController {
    * @returns Movie 목록
    */
   @Get()
-  getAll(): Movie[] {
+  getMovies(): Movie[] {
     return this.moviesService.getMovies();
   }
 
@@ -32,7 +32,7 @@ export class MoviesController {
    * @returns Movie 상세 정보
    */
   @Get(':id')
-  getOne(@Param('id') movieId: string) {
+  getMovie(@Param('id') movieId: string) {
     return this.moviesService.getMovie(movieId);
   }
 
@@ -52,9 +52,6 @@ export class MoviesController {
 
   @Patch(':id')
   patch(@Param('id') movieId: string, @Body() updateData) {
-    return {
-      updatedMovie: movieId,
-      ...updateData,
-    };
+    return this.moviesService.update(movieId, updateData);
   }
 }
